@@ -16,7 +16,6 @@ namespace ApiGoBarber.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _service;
@@ -32,6 +31,13 @@ namespace ApiGoBarber.Controllers
         {
             UserDTO user = await _service.Save(userDTO);
             return Created(new Uri($"{Request.Path}/{user.Id}", UriKind.Relative), user);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> Update(UpdateUserDTO dto)
+        {
+            await _service.Update(dto);
+            return NoContent();
         }
     }
 }

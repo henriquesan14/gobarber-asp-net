@@ -14,7 +14,6 @@ using ApiGoBarber.ExceptionUtil;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using ApiGoBarber.Settings;
 
 namespace ApiGoBarber
 {
@@ -47,7 +46,7 @@ namespace ApiGoBarber
             services.AddControllers(options =>
                 options.Filters.Add(new HttpResponseExceptionFilter()));
 
-            var key = Encoding.ASCII.GetBytes(TokenSettings.Secret);
+            var key = Encoding.ASCII.GetBytes(Configuration["TokenSettings:Secret"]);
 
             services.AddAuthentication(x =>
             {
@@ -66,7 +65,7 @@ namespace ApiGoBarber
                     ValidateAudience = false
                 };
             });
-
+            services.JsonSerializationConfig();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

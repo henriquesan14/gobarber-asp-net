@@ -14,6 +14,7 @@ namespace ApiGoBarber.Mappings
         public UserMapping()
         {
             CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<UpdateUserDTO, User>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
         }
     }
 }

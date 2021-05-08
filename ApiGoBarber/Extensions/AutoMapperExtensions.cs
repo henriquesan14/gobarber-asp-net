@@ -2,6 +2,7 @@
 using ApiGoBarber.Repositories.Base;
 using ApiGoBarber.Services;
 using ApiGoBarber.Services.Interfaces;
+using ApiGoBarber.Validators;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,11 @@ namespace ApiGoBarber.Extensions
 
             //Services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITokenService, TokenService>();
+
+            //validators
+            services.AddScoped<UserValidator>();
+            services.AddScoped<UpdateUserValidator>();
 
             return services;
         }
