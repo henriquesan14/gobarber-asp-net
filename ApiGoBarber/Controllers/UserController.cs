@@ -8,6 +8,7 @@ using ApiGoBarber.Extensions;
 using ApiGoBarber.Repositories;
 using ApiGoBarber.Services.Interfaces;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,6 +16,7 @@ namespace ApiGoBarber.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _service;
@@ -26,7 +28,7 @@ namespace ApiGoBarber.Controllers
         
 
         [HttpPost]
-        public async Task<IActionResult> Save([FromBody] UserDTO userDTO)
+        public async Task<ActionResult<UserDTO>> Save([FromBody] UserDTO userDTO)
         {
             UserDTO user = await _service.Save(userDTO);
             return Created(new Uri($"{Request.Path}/{user.Id}", UriKind.Relative), user);

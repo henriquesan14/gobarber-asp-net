@@ -10,5 +10,7 @@ namespace ApiGoBarber.Services.Interfaces
     public interface IUserService
     {
         Task<UserDTO> Save(UserDTO dto);
+
+        Task<AuthResponseDTO> Login(UserCredentialsDTO dto);
     }
 }

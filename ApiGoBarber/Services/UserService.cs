@@ -24,6 +24,32 @@ namespace ApiGoBarber.Services
             _mapper = mapper;
         }
 
+        public async Task<AuthResponseDTO> Login(UserCredentialsDTO dto)
+        {
+            User userExist = await _repository.GetByEmail(dto.Email);
+            if(userExist == null)
+            {
+                throw new HttpResponseException(HttpStatusCode.Unauthorized, new
+                {
+                    Message = "Usuário/senha inválido(s)"
+                });
+            }
+            bool password = BCrypt.Net.BCrypt.Verify(dto.Password, userExist.Password);
+            if (!password)
+            {
+                throw new HttpResponseException(HttpStatusCode.Unauthorized, new
+                {
+                    Message = "Usuário/senha inválido(s)"
+                });
+            }
+            var token = TokenService.GenerateToken(userExist);
+            userExist.Password = null;
+            return new AuthResponseDTO {
+                Token = token,
+                User = _mapper.Map<UserDTO>(userExist)
+            };
+        }
+
         public async Task<UserDTO> Save(UserDTO dto)
         {
             User userExist = await _repository.GetByEmail(dto.Email);
@@ -33,7 +59,9 @@ namespace ApiGoBarber.Services
                     Message = "Já existe um usuário com este email"
                 });
             }
+            dto.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password, 8);
             User userCreated = await _repository.AddAsync(_mapper.Map<User>(dto));
+            userCreated.Password = null;
             return _mapper.Map<UserDTO>(userCreated);
         }
     }
