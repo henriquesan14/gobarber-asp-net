@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiGoBarber.Migrations
 {
     [DbContext(typeof(GoBarberContext))]
-    [Migration("20210508005401_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20210508172602_CreateInitial")]
+    partial class CreateInitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -61,7 +61,7 @@ namespace ApiGoBarber.Migrations
                     b.ToTable("Appointments");
                 });
 
-            modelBuilder.Entity("ApiGoBarber.Entities.File", b =>
+            modelBuilder.Entity("ApiGoBarber.Entities.Avatar", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -85,7 +85,7 @@ namespace ApiGoBarber.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Files");
+                    b.ToTable("Avatars");
                 });
 
             modelBuilder.Entity("ApiGoBarber.Entities.User", b =>
@@ -95,14 +95,14 @@ namespace ApiGoBarber.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("AvatarId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("FileId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -118,7 +118,7 @@ namespace ApiGoBarber.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FileId");
+                    b.HasIndex("AvatarId");
 
                     b.ToTable("Users");
                 });
@@ -136,9 +136,9 @@ namespace ApiGoBarber.Migrations
 
             modelBuilder.Entity("ApiGoBarber.Entities.User", b =>
                 {
-                    b.HasOne("ApiGoBarber.Entities.File", "File")
+                    b.HasOne("ApiGoBarber.Entities.Avatar", "Avatar")
                         .WithMany()
-                        .HasForeignKey("FileId");
+                        .HasForeignKey("AvatarId");
                 });
 #pragma warning restore 612, 618
         }

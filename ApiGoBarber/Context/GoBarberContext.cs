@@ -15,7 +15,7 @@ namespace ApiGoBarber.Context
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<File> Files { get; set; }
+        public DbSet<Avatar> Avatars { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
     }
 }

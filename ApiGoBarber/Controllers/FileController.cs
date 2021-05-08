@@ -11,18 +11,18 @@ namespace ApiGoBarber.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class FileController : ControllerBase
     {
-        private readonly IUserService _service;
-        public AuthController(IUserService service)
+        private readonly IFileService _fileService;
+        public FileController(IFileService fileService)
         {
-            _service = service;
+            _fileService = fileService;
         }
 
         [HttpPost]
-        public async Task<ActionResult<AuthResponseDTO>> Login([FromBody] UserCredentialsDTO credentialsDto)
+        public async Task<ActionResult<AvatarDTO>> Save([FromForm] IFormFile file)
         {
-            return await _service.Login(credentialsDto);
+            return await _fileService.Save(file);
         }
     }
 }

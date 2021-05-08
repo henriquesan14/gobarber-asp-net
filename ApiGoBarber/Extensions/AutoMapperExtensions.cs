@@ -1,5 +1,6 @@
 ﻿using ApiGoBarber.Repositories;
 using ApiGoBarber.Repositories.Base;
+using ApiGoBarber.Repositories.Interfaces;
 using ApiGoBarber.Services;
 using ApiGoBarber.Services.Interfaces;
 using ApiGoBarber.Validators;
@@ -18,9 +19,11 @@ namespace ApiGoBarber.Extensions
             //Repositories
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IFileRepository, FileRepository >();
 
             //Services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IFileService, FileService>();
             services.AddScoped<ITokenService, TokenService>();
 
             //validators

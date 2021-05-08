@@ -3,12 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ApiGoBarber.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class CreateInitial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Files",
+                name: "Avatars",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -21,7 +21,7 @@ namespace ApiGoBarber.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Files", x => x.Id);
+                    table.PrimaryKey("PK_Avatars", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -36,15 +36,15 @@ namespace ApiGoBarber.Migrations
                     Email = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true),
                     Provider = table.Column<bool>(nullable: false),
-                    FileId = table.Column<int>(nullable: true)
+                    AvatarId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Files_FileId",
-                        column: x => x.FileId,
-                        principalTable: "Files",
+                        name: "FK_Users_Avatars_AvatarId",
+                        column: x => x.AvatarId,
+                        principalTable: "Avatars",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -92,9 +92,9 @@ namespace ApiGoBarber.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_FileId",
+                name: "IX_Users_AvatarId",
                 table: "Users",
-                column: "FileId");
+                column: "AvatarId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -106,7 +106,7 @@ namespace ApiGoBarber.Migrations
                 name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Files");
+                name: "Avatars");
         }
     }
 }

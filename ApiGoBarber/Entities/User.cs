@@ -15,6 +15,6 @@ namespace ApiGoBarber.Entities
 
         public bool Provider { get; set; }
 
-        public File File { get; set; }
+        public Avatar Avatar { get; set; }
     }
 }
