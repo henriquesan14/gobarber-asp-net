@@ -26,6 +26,7 @@ namespace ApiGoBarber.Extensions
             //validators
             services.AddScoped<UserValidator>();
             services.AddScoped<UpdateUserValidator>();
+            services.AddScoped<CredentialsValidator>();
 
             return services;
         }

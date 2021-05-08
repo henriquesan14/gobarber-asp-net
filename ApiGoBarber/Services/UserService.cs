@@ -23,18 +23,26 @@ namespace ApiGoBarber.Services
         private readonly ITokenService _tokenService;
         private readonly UserValidator _userValidator;
         private readonly UpdateUserValidator _updateUserValidator;
+        private readonly CredentialsValidator _credentialsValidator;
 
-        public UserService(IUserRepository repository, IMapper mapper, ITokenService tokenService, UserValidator userValidator, UpdateUserValidator updateUserValidator)
+        public UserService(IUserRepository repository, IMapper mapper, ITokenService tokenService, UserValidator userValidator,
+            UpdateUserValidator updateUserValidator, CredentialsValidator credentialsValidator)
         {
             _repository = repository;
             _mapper = mapper;
             _tokenService = tokenService;
             _userValidator = userValidator;
             _updateUserValidator = updateUserValidator;
+            _credentialsValidator = credentialsValidator;
         }
 
         public async Task<AuthResponseDTO> Login(UserCredentialsDTO dto)
         {
+            ValidationResult result = _credentialsValidator.Validate(dto);
+            if (result.Errors.Count > 0)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, result.Errors);
+            }
             User userExist = await _repository.GetByEmail(dto.Email);
             if(userExist == null)
             {
