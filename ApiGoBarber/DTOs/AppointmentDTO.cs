@@ -12,6 +12,8 @@ namespace ApiGoBarber.DTOs
 
         public DateTime? Date { get; set; }
 
+        public DateTime? CanceledAt { get; set; }
+
         public ProviderDTO Provider { get; set; }
     }
 }
