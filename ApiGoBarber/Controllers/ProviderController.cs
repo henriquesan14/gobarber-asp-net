@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ApiGoBarber.DTOs;
 using ApiGoBarber.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,10 +12,11 @@ namespace ApiGoBarber.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ProviderController : ControllerBase
     {
 
-        private IUserService _userService;
+        private readonly IUserService _userService;
 
         public ProviderController(IUserService userService)
         {

@@ -95,7 +95,6 @@ namespace ApiGoBarber.Services
             }
             dto.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password, 8);
             User userCreated = await _repository.AddAsync(_mapper.Map<User>(dto));
-            userCreated.Password = null;
             return _mapper.Map<UserDTO>(userCreated);
         }
 

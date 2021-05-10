@@ -30,10 +30,12 @@ namespace ApiGoBarber.Controllers
         public async Task<ActionResult<UserDTO>> Save([FromBody] UserDTO userDTO)
         {
             UserDTO user = await _service.Save(userDTO);
+            user.Password = null;
             return Created(new Uri($"{Request.Path}/{user.Id}", UriKind.Relative), user);
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<ActionResult> Update(UpdateUserDTO dto)
         {
             await _service.Update(dto);

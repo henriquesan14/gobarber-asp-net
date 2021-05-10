@@ -9,15 +9,11 @@ namespace ApiGoBarber.Entities
     public class Appointment : Entity
     {
 
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
 
-        public DateTime CanceledAt { get; set; }
+        public DateTime? CanceledAt { get; set; }
 
-        public virtual bool Past { get; set; }
-
-        public bool Cancelable { get; set; }
-
-        public virtual User User { get; set; }
+        public User User { get; set; }
 
         public User Provider { get; set; }
     }

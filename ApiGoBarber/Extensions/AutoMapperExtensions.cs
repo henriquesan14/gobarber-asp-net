@@ -20,16 +20,19 @@ namespace ApiGoBarber.Extensions
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IFileRepository, FileRepository >();
+            services.AddTransient<IAppointmentRepository, AppointmentRepository>();
 
             //Services
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IAppointmentService, AppointmentService>();
             services.AddScoped<ITokenService, TokenService>();
 
             //validators
             services.AddScoped<UserValidator>();
             services.AddScoped<UpdateUserValidator>();
             services.AddScoped<CredentialsValidator>();
+            services.AddScoped<AppointmentValidator>();
 
             return services;
         }

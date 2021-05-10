@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using ApiGoBarber.DTOs;
 using ApiGoBarber.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +12,7 @@ namespace ApiGoBarber.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
+    [Authorize]
     public class FileController : ControllerBase
     {
         private readonly IFileService _fileService;

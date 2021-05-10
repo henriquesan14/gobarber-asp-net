@@ -57,10 +57,8 @@ namespace ApiGoBarber.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreatedAt = table.Column<DateTime>(nullable: true),
                     UpdatedAt = table.Column<DateTime>(nullable: true),
-                    Date = table.Column<DateTime>(nullable: false),
-                    CanceledAt = table.Column<DateTime>(nullable: false),
-                    Past = table.Column<bool>(nullable: false),
-                    Cancelable = table.Column<bool>(nullable: false),
+                    Date = table.Column<DateTime>(nullable: true),
+                    CanceledAt = table.Column<DateTime>(nullable: true),
                     UserId = table.Column<int>(nullable: true),
                     ProviderId = table.Column<int>(nullable: true)
                 },

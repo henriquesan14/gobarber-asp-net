@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiGoBarber.Migrations
 {
     [DbContext(typeof(GoBarberContext))]
-    [Migration("20210508182850_InitialCreate")]
+    [Migration("20210510171635_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,20 +28,14 @@ namespace ApiGoBarber.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool>("Cancelable")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("CanceledAt")
+                    b.Property<DateTime?>("CanceledAt")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime?>("Date")
                         .HasColumnType("datetime2");
-
-                    b.Property<bool>("Past")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("ProviderId")
                         .HasColumnType("int");
