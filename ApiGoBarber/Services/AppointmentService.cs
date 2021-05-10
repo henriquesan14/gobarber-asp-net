@@ -5,10 +5,13 @@ using ApiGoBarber.Repositories.Interfaces;
 using ApiGoBarber.Services.Interfaces;
 using ApiGoBarber.Validators;
 using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ApiGoBarber.Services
@@ -29,7 +32,14 @@ namespace ApiGoBarber.Services
             _mapper = mapper;
             _validator = validator;
         }
-        public async Task<AppointmentDTO> SaveAppointment(AppointmentDTO appointmentDto, int userId)
+
+        public async Task<List<AppointmentDTO>> GetAppointments(int userId)
+        {
+            var appointments = await _repository.GetAppointments(userId);
+            return _mapper.Map<List<AppointmentDTO>>(appointments);
+        }
+
+        public async Task<CreateAppointmentDTO> SaveAppointment(CreateAppointmentDTO appointmentDto, int userId)
         {
             var result = _validator.Validate(appointmentDto);
             if(result.Errors.Count() > 0)
@@ -48,7 +58,7 @@ namespace ApiGoBarber.Services
             User user = await _userRepository.GetByIdAsync(appointmentDto.UserId);
             appointment.User = user;
             Appointment appointmentSaved = await _repository.AddAsync(appointment);
-            return _mapper.Map<AppointmentDTO>(appointmentSaved);
+            return _mapper.Map<CreateAppointmentDTO>(appointmentSaved);
         }
     }
 }

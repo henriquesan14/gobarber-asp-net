@@ -9,5 +9,6 @@ namespace ApiGoBarber.Repositories.Interfaces
 {
     public interface IAppointmentRepository : IRepository<Appointment>
     {
+        Task<IEnumerable<Appointment>> GetAppointments(int userId);
     }
 }

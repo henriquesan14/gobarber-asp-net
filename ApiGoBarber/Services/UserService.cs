@@ -44,7 +44,7 @@ namespace ApiGoBarber.Services
         {
             Expression<Func<User, bool>> predicate = u => u.Provider;
             Func<IQueryable<User>, IOrderedQueryable<User>> orderBy = u => u.OrderBy(u => u.Name);
-            IEnumerable<User> providers = await _repository.GetAsync(predicate, orderBy, "Avatar", false);
+            IEnumerable<User> providers = await _repository.GetAsync(predicate, orderBy, "Avatar");
             return _mapper.Map<List<ProviderDTO>>(providers);
         }
 

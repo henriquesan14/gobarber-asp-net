@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ApiGoBarber.Validators
 {
-    public class AppointmentValidator : AbstractValidator<AppointmentDTO>
+    public class AppointmentValidator : AbstractValidator<CreateAppointmentDTO>
     {
         public AppointmentValidator()
         {

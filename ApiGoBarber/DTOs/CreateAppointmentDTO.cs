@@ -5,13 +5,15 @@ using System.Threading.Tasks;
 
 namespace ApiGoBarber.DTOs
 {
-    public class AppointmentDTO
+    public class CreateAppointmentDTO
     {
 
         public int Id { get; set; }
 
         public DateTime? Date { get; set; }
 
-        public ProviderDTO Provider { get; set; }
+        public int ProviderId { get; set; }
+
+        public int UserId { get; set; }
     }
 }

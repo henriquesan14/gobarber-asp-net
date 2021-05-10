@@ -8,6 +8,7 @@ namespace ApiGoBarber.Services.Interfaces
 {
     public interface IAppointmentService
     {
-        Task<AppointmentDTO> SaveAppointment(AppointmentDTO appointmentdTO, int userId);
+        Task<CreateAppointmentDTO> SaveAppointment(CreateAppointmentDTO appointmentdTO, int userId);
+        Task<List<AppointmentDTO>> GetAppointments(int userId);
     }
 }

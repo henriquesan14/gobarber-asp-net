@@ -23,12 +23,21 @@ namespace ApiGoBarber.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<AppointmentDTO>> SaveAppointment([FromBody] AppointmentDTO appointmentDto)
+        public async Task<ActionResult<CreateAppointmentDTO>> SaveAppointment([FromBody] CreateAppointmentDTO appointmentDto)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claims = identity.Claims;
-            var id = claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-            return await _appointmentService.SaveAppointment(appointmentDto, Int32.Parse(id));
+            var userId = claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            return await _appointmentService.SaveAppointment(appointmentDto, Int32.Parse(userId));
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<AppointmentDTO>>> GetAppointments()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = identity.Claims;
+            var userId = claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            return await _appointmentService.GetAppointments(Int32.Parse(userId));
         }
     }
 }

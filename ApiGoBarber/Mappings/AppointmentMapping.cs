@@ -12,6 +12,7 @@ namespace ApiGoBarber.Mappings
     {
         public AppointmentMapping()
         {
+            CreateMap<Appointment, CreateAppointmentDTO>().ReverseMap();
             CreateMap<Appointment, AppointmentDTO>().ReverseMap();
         }
     }
