@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using BCrypt.Net;
 using ApiGoBarber.Validators;
 using FluentValidation.Results;
+using ApiGoBarber.Repositories.Interfaces;
 
 namespace ApiGoBarber.Services
 {
@@ -20,13 +21,14 @@ namespace ApiGoBarber.Services
     {
         private readonly IMapper _mapper;
         private readonly IUserRepository _repository;
+        private readonly IFileRepository _fileRepository;
         private readonly ITokenService _tokenService;
         private readonly UserValidator _userValidator;
         private readonly UpdateUserValidator _updateUserValidator;
         private readonly CredentialsValidator _credentialsValidator;
 
         public UserService(IUserRepository repository, IMapper mapper, ITokenService tokenService, UserValidator userValidator,
-            UpdateUserValidator updateUserValidator, CredentialsValidator credentialsValidator)
+            UpdateUserValidator updateUserValidator, CredentialsValidator credentialsValidator, IFileRepository fileRepository)
         {
             _repository = repository;
             _mapper = mapper;
@@ -34,6 +36,7 @@ namespace ApiGoBarber.Services
             _userValidator = userValidator;
             _updateUserValidator = updateUserValidator;
             _credentialsValidator = credentialsValidator;
+            _fileRepository = fileRepository;
         }
 
         public async Task<AuthResponseDTO> Login(UserCredentialsDTO dto)
@@ -122,6 +125,14 @@ namespace ApiGoBarber.Services
             }
             User userUpdate = _mapper.Map(dto, user);
             if(userUpdate.Password != null) userUpdate.Password = BCrypt.Net.BCrypt.HashPassword(userUpdate.Password, 8);
+            if (dto.AvatarId != 0)
+            {
+                Avatar avatar = await _fileRepository.GetByIdAsync(dto.AvatarId);
+                if(avatar != null)
+                {
+                    userUpdate.Avatar = avatar;
+                }
+            }
             await _repository.UpdateAsync(userUpdate);
         }
     }

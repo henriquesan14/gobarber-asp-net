@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace ApiGoBarber.Repositories
+namespace ApiGoBarber.Repositories.Interfaces
 {
     public interface IUserRepository : IRepository<User>
     {

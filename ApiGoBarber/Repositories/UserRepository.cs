@@ -1,6 +1,7 @@
 ﻿using ApiGoBarber.Context;
 using ApiGoBarber.Entities;
 using ApiGoBarber.Repositories.Base;
+using ApiGoBarber.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;

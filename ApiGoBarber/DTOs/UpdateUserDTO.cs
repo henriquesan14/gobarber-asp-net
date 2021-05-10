@@ -15,5 +15,7 @@ namespace ApiGoBarber.DTOs
         public string OldPassword { get; set; }
 
         public string Password { get; set; }
+        public int AvatarId { get; set; }
+
     }
 }

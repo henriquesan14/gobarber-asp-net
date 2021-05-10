@@ -14,6 +14,7 @@ namespace ApiGoBarber.Validators
             RuleFor(u => u.Email)
                 .EmailAddress().WithMessage("Endereço de email inválido");
             RuleFor(u => u.OldPassword)
+                .NotEmpty().When(u => u.Password != null).WithMessage("O campo de senha antiga é obrigatório quando a senha for incluida")
                .MinimumLength(6).WithMessage("O campo {PropertyName} precisa ter pelo menos 6 caracteres");
             RuleFor(u => u.Password)
                 .NotEmpty().When(u => u.OldPassword != null).WithMessage("O campo de senha é obrigatório quando a senha antiga for incluida")

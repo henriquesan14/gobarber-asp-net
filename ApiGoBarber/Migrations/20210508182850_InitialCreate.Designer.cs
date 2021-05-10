@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiGoBarber.Migrations
 {
     [DbContext(typeof(GoBarberContext))]
-    [Migration("20210508172602_CreateInitial")]
-    partial class CreateInitial
+    [Migration("20210508182850_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
