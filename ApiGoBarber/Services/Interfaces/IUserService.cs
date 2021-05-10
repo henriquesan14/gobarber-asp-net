@@ -12,5 +12,8 @@ namespace ApiGoBarber.Services.Interfaces
         Task<UserDTO> Save(UserDTO dto);
         Task Update(UpdateUserDTO dto);
 
-        Task<AuthResponseDTO> Login(UserCredentialsDTO dto);    }
+        Task<AuthResponseDTO> Login(UserCredentialsDTO dto);
+
+        Task<List<ProviderDTO>> GetProviders();
+    }
 }

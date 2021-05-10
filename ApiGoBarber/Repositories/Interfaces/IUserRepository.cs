@@ -11,5 +11,6 @@ namespace ApiGoBarber.Repositories.Interfaces
     {
 
         Task<User> GetByEmail(string email);
+
     }
 }

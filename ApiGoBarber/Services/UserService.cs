@@ -14,6 +14,7 @@ using BCrypt.Net;
 using ApiGoBarber.Validators;
 using FluentValidation.Results;
 using ApiGoBarber.Repositories.Interfaces;
+using System.Linq.Expressions;
 
 namespace ApiGoBarber.Services
 {
@@ -37,6 +38,14 @@ namespace ApiGoBarber.Services
             _updateUserValidator = updateUserValidator;
             _credentialsValidator = credentialsValidator;
             _fileRepository = fileRepository;
+        }
+
+        public async Task<List<ProviderDTO>> GetProviders()
+        {
+            Expression<Func<User, bool>> predicate = u => u.Provider;
+            Func<IQueryable<User>, IOrderedQueryable<User>> orderBy = u => u.OrderBy(u => u.Name);
+            IEnumerable<User> providers = await _repository.GetAsync(predicate, orderBy, "Avatar", false);
+            return _mapper.Map<List<ProviderDTO>>(providers);
         }
 
         public async Task<AuthResponseDTO> Login(UserCredentialsDTO dto)
