@@ -1,6 +1,7 @@
 ﻿using ApiGoBarber.DTOs;
 using ApiGoBarber.Entities;
 using ApiGoBarber.ExceptionUtil;
+using ApiGoBarber.Page;
 using ApiGoBarber.Repositories.Interfaces;
 using ApiGoBarber.Services.Interfaces;
 using ApiGoBarber.Validators;
@@ -33,10 +34,11 @@ namespace ApiGoBarber.Services
             _validator = validator;
         }
 
-        public async Task<List<AppointmentDTO>> GetAppointments(int userId)
+        public async Task<PagedList<AppointmentDTO>> GetAppointments(int userId, PageFilter pageFilter)
         {
-            var appointments = await _repository.GetAppointments(userId);
-            return _mapper.Map<List<AppointmentDTO>>(appointments);
+            var appointments = await _repository.GetAppointments(userId, pageFilter);
+            var appointmentsDto = _mapper.Map<List<AppointmentDTO>>(appointments);
+            return new PagedList<AppointmentDTO>(appointmentsDto, appointmentsDto.Count(), pageFilter.PageNumber, pageFilter.PageSize);
         }
 
         public async Task<CreateAppointmentDTO> SaveAppointment(CreateAppointmentDTO appointmentDto, int userId)
@@ -55,7 +57,7 @@ namespace ApiGoBarber.Services
             }
             Appointment appointment = _mapper.Map<Appointment>(appointmentDto);
             appointment.Provider = isProvider;
-            User user = await _userRepository.GetByIdAsync(appointmentDto.UserId);
+            User user = await _userRepository.GetByIdAsync(userId);
             appointment.User = user;
             Appointment appointmentSaved = await _repository.AddAsync(appointment);
             return _mapper.Map<CreateAppointmentDTO>(appointmentSaved);

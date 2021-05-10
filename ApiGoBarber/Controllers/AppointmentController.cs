@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using ApiGoBarber.DTOs;
+using ApiGoBarber.Page;
 using ApiGoBarber.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -32,12 +33,12 @@ namespace ApiGoBarber.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<AppointmentDTO>>> GetAppointments()
+        public async Task<ActionResult<PagedList<AppointmentDTO>>> GetAppointments([FromQuery] PageFilter pageFilter)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             IEnumerable<Claim> claims = identity.Claims;
             var userId = claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
-            return await _appointmentService.GetAppointments(Int32.Parse(userId));
+            return Ok(await _appointmentService.GetAppointments(Int32.Parse(userId), pageFilter));
         }
     }
 }

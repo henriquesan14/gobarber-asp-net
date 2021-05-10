@@ -1,4 +1,5 @@
 ﻿using ApiGoBarber.Entities;
+using ApiGoBarber.Page;
 using ApiGoBarber.Repositories.Base;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,6 @@ namespace ApiGoBarber.Repositories.Interfaces
 {
     public interface IAppointmentRepository : IRepository<Appointment>
     {
-        Task<IEnumerable<Appointment>> GetAppointments(int userId);
+        Task<IEnumerable<Appointment>> GetAppointments(int userId, PageFilter pageFilter);
     }
 }

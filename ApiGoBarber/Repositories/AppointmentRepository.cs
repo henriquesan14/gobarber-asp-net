@@ -1,5 +1,6 @@
 ﻿using ApiGoBarber.Context;
 using ApiGoBarber.Entities;
+using ApiGoBarber.Page;
 using ApiGoBarber.Repositories.Base;
 using ApiGoBarber.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,7 @@ namespace ApiGoBarber.Repositories
 
         }
 
-        public async Task<IEnumerable<Appointment>> GetAppointments(int userId)
+        public async Task<IEnumerable<Appointment>> GetAppointments(int userId, PageFilter pageFilter)
         {
             return await _dbContext.Appointments
                 .AsNoTracking()
@@ -25,7 +26,10 @@ namespace ApiGoBarber.Repositories
                         .ThenInclude(p => p.Avatar)
                             .Where(a => a.User.Id == userId && !a.CanceledAt.HasValue)
                                 .OrderBy(a => a.Date)
+                                .Skip((pageFilter.PageNumber - 1) * pageFilter.PageSize)
+                                .Take(pageFilter.PageSize)
                                     .ToListAsync();
+                                    
         }
     }
 }

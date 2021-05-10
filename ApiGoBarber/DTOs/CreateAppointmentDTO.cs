@@ -14,6 +14,5 @@ namespace ApiGoBarber.DTOs
 
         public int ProviderId { get; set; }
 
-        public int UserId { get; set; }
     }
 }

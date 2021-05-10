@@ -20,6 +20,7 @@ namespace ApiGoBarber.Repositories
         public async Task<User> GetByEmail(string email)
         {
             var user = await _dbContext.Users
+                                .AsNoTracking()
                                 .Where(u => u.Email == email).FirstOrDefaultAsync();
             return user;
         }
