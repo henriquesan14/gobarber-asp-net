@@ -1,5 +1,6 @@
 ﻿using ApiGoBarber.DTOs;
 using ApiGoBarber.Entities;
+using ApiGoBarber.Entities.SchemasMongoDb;
 using ApiGoBarber.ExceptionUtil;
 using ApiGoBarber.Page;
 using ApiGoBarber.Repositories.Interfaces;
@@ -22,16 +23,18 @@ namespace ApiGoBarber.Services
 
         private readonly IAppointmentRepository _repository;
         private readonly IUserRepository _userRepository;
+        private readonly INotificationRepository _notificationRepository;
         private readonly IMapper _mapper;
         private readonly AppointmentValidator _validator;
 
         public AppointmentService(IAppointmentRepository repository, IMapper mapper, AppointmentValidator validator,
-            IUserRepository userRepository)
+            IUserRepository userRepository, INotificationRepository notificationRepository)
         {
             _repository = repository;
             _userRepository = userRepository;
             _mapper = mapper;
             _validator = validator;
+            _notificationRepository = notificationRepository;
         }
 
         public async Task<PagedList<AppointmentDTO>> GetAppointments(int userId, PageFilter pageFilter)
@@ -56,11 +59,37 @@ namespace ApiGoBarber.Services
                     Message = "Você só pode criar agendamentos para provedores"
                 });
             }
+            var date = appointmentDto.Date.Value;
+            var hourStart = new DateTime(date.Year, date.Month, date.Day, date.Hour, 0, 0);
+
+            if (hourStart < DateTime.Now)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, new { 
+                    Message = "Não é permitido horário anterior ao atual"
+                });
+            }
+
+            Expression<Func<Appointment, bool>> predicate = a => a.Provider.Id == appointmentDto.ProviderId && !a.CanceledAt.HasValue
+            && a.Date.Value == hourStart;
+            var checkAvailability = await _repository.GetAsync(predicate);
+            if(checkAvailability.Count() > 0)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, new
+                {
+                    Message = "Horário não está disponivel"
+                });
+            }
+
             Appointment appointment = _mapper.Map<Appointment>(appointmentDto);
             appointment.Provider = isProvider;
             User user = await _userRepository.GetByIdAsync(userId);
             appointment.User = user;
             Appointment appointmentSaved = await _repository.AddAsync(appointment);
+
+            await _notificationRepository.Create(new Notification { 
+                Content = $"Novo agendamento de {user.Name} para o dia {appointmentDto.Date.Value.Day}/{appointmentDto.Date.Value.Month}/{appointmentDto.Date.Value.Year} {appointmentDto.Date.Value.Hour}:{appointmentDto.Date.Value.Minute}",
+                UserId = appointmentDto.ProviderId
+            });
             return _mapper.Map<CreateAppointmentDTO>(appointmentSaved);
         }
 

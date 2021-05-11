@@ -14,6 +14,8 @@ using ApiGoBarber.ExceptionUtil;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ApiGoBarber.Settings;
+using Microsoft.Extensions.Options;
 
 namespace ApiGoBarber
 {
@@ -30,6 +32,12 @@ namespace ApiGoBarber
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.Configure<GoBarberDatabaseSettings>(Configuration.GetSection(nameof(GoBarberDatabaseSettings)));
+            services.AddSingleton<IGoBarberDatabaseSettings>(sp =>
+            sp.GetRequiredService<IOptions<GoBarberDatabaseSettings>>().Value);
+
+            services.AddTransient<IGoBarberMongoContext , GoBarberMongoContext>();
 
             services.AddDbContext<GoBarberContext>(c => 
                 c.UseSqlServer(Configuration.GetConnectionString("DbConnection")), ServiceLifetime.Singleton);
