@@ -8,7 +8,7 @@ namespace ApiGoBarber.Repositories.Interfaces
 {
     public interface INotificationRepository
     {
-        Task<IEnumerable<Notification>> GetNotifications();
+        Task<IEnumerable<Notification>> GetNotifications(int userId);
         Task<Notification> GetNotification(string id);
         Task Create(Notification product);
     }

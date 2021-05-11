@@ -28,9 +28,9 @@ namespace ApiGoBarber.Repositories
             return await _context.Notifications.Find(n => n.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<Notification>> GetNotifications()
+        public async Task<IEnumerable<Notification>> GetNotifications(int userId)
         {
-            return await _context.Notifications.Find(n => true).ToListAsync();
+            return await _context.Notifications.Find(n => n.UserId == userId).SortByDescending(n => n.CreatedAt).Limit(20).ToListAsync();
         }
     }
 }
