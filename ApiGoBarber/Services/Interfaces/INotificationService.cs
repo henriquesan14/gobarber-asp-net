@@ -8,6 +8,7 @@ namespace ApiGoBarber.Services.Interfaces
 {
     public interface INotificationService
     {
-        Task<IEnumerable<NotificationDTO>> GetNotifications(int userId); 
+        Task<IEnumerable<NotificationDTO>> GetNotifications(int userId);
+        Task UpdateNotification(string id);
     }
 }

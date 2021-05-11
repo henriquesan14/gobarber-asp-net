@@ -11,5 +11,6 @@ namespace ApiGoBarber.Repositories.Interfaces
         Task<IEnumerable<Notification>> GetNotifications(int userId);
         Task<Notification> GetNotification(string id);
         Task Create(Notification product);
+        Task<bool> Update(Notification notification);
     }
 }

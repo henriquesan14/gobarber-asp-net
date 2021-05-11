@@ -38,5 +38,13 @@ namespace ApiGoBarber.Services
             IEnumerable<Notification>  notifications = await _notificationRepository.GetNotifications(userId);
             return _mapper.Map<List<NotificationDTO>>(notifications);
         }
+
+        public async Task UpdateNotification(string id)
+        {
+            var notification = await _notificationRepository.GetNotification(id);
+            notification.Read = true;
+            notification.UpdatedAt = DateTime.Now;
+            await _notificationRepository.Update(notification);
+        }
     }
 }

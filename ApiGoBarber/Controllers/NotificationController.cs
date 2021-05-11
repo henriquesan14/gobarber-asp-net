@@ -30,5 +30,12 @@ namespace ApiGoBarber.Controllers
             var userId = claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
             return Ok(await _notificationService.GetNotifications(Int32.Parse(userId)));
         }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateNotification(string id)
+        {
+            await _notificationService.UpdateNotification(id);
+            return NoContent();
+        }
     }
 }

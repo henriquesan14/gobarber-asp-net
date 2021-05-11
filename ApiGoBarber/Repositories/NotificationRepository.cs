@@ -32,5 +32,12 @@ namespace ApiGoBarber.Repositories
         {
             return await _context.Notifications.Find(n => n.UserId == userId).SortByDescending(n => n.CreatedAt).Limit(20).ToListAsync();
         }
+
+        public async Task<bool> Update(Notification notification)
+        {
+            var updateResult = await _context.Notifications.
+                ReplaceOneAsync(filter: g => g.Id == notification.Id, replacement: notification);
+            return updateResult.IsAcknowledged && updateResult.ModifiedCount > 0;
+        }
     }
 }
