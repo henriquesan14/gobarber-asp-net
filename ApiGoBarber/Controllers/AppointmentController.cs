@@ -40,5 +40,15 @@ namespace ApiGoBarber.Controllers
             var userId = claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
             return Ok(await _appointmentService.GetAppointments(Int32.Parse(userId), pageFilter));
         }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> CancelAppointment(int id)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            IEnumerable<Claim> claims = identity.Claims;
+            var userId = claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+            await _appointmentService.CancelAppointment(id, Int32.Parse(userId));
+            return NoContent();
+        }
     }
 }

@@ -31,5 +31,10 @@ namespace ApiGoBarber.Repositories
                                     .ToListAsync();
                                     
         }
+
+        public override async Task<Appointment> GetByIdAsync(int id)
+        {
+            return await _dbContext.Appointments.Include(a => a.User).FirstAsync(a => a.Id == id);
+        }
     }
 }

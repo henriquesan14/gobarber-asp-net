@@ -121,6 +121,30 @@ namespace ApiGoBarber.Services
             IEnumerable<AppointmentDTO> appointmentsDto = _mapper.Map<List<AppointmentDTO>>(appointments);
             return appointmentsDto;
         }
+
+        public async Task CancelAppointment(int id, int userId)
+        {
+            var appointment = await _repository.GetByIdAsync(id);
+            if(appointment != null && appointment.User.Id != userId)
+            {
+                throw new HttpResponseException(HttpStatusCode.Unauthorized, new
+                {
+                    Message = "Você não pode cancelar esse cancelamento"
+                });
+            }
+
+            DateTime date = appointment.Date.Value;
+            DateTime dateWithSub = new DateTime(date.Year, date.Month, date.Day, date.Hour - 2, date.Minute, date.Second);
+            if (dateWithSub < DateTime.Now)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, new
+                {
+                    Message = "Você só pode cancelar o agendamento com 2 horas de antecedência"
+                });
+            }
+            appointment.CanceledAt = DateTime.Now;
+            await _repository.UpdateAsync(appointment);
+        }
     }
 
 }
