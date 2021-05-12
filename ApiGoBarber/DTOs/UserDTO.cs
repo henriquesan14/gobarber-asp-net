@@ -13,5 +13,7 @@ namespace ApiGoBarber.DTOs
 
         public string Password { get; set; }
 
+        public bool Provider { get; set; }
+
     }
 }

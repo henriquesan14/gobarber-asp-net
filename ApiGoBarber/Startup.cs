@@ -16,6 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using ApiGoBarber.Settings;
 using Microsoft.Extensions.Options;
+using StackExchange.Redis;
 
 namespace ApiGoBarber
 {
@@ -32,6 +33,14 @@ namespace ApiGoBarber
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddSingleton<ConnectionMultiplexer>(sp =>
+            {
+                var configuration = ConfigurationOptions.Parse(Configuration.GetConnectionString("Redis"), true);
+                return ConnectionMultiplexer.Connect(configuration);
+            });
+
+            services.AddTransient<IGoBarberRedisContext, GoBarberRedisContext>();
 
             services.Configure<GoBarberDatabaseSettings>(Configuration.GetSection(nameof(GoBarberDatabaseSettings)));
             services.AddSingleton<IGoBarberDatabaseSettings>(sp =>

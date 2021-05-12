@@ -22,6 +22,7 @@ namespace ApiGoBarber.Extensions
             services.AddTransient<IFileRepository, FileRepository >();
             services.AddTransient<IAppointmentRepository, AppointmentRepository>();
             services.AddTransient<INotificationRepository, NotificationRepository>();
+            services.AddTransient<IProviderCacheRepository, ProviderCacheRepository>();
 
             //Services
             services.AddScoped<IUserService, UserService>();

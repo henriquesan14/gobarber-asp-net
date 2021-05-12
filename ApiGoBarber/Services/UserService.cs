@@ -23,13 +23,15 @@ namespace ApiGoBarber.Services
         private readonly IMapper _mapper;
         private readonly IUserRepository _repository;
         private readonly IFileRepository _fileRepository;
+        private readonly IProviderCacheRepository _providerCacheRepository;
         private readonly ITokenService _tokenService;
         private readonly UserValidator _userValidator;
         private readonly UpdateUserValidator _updateUserValidator;
         private readonly CredentialsValidator _credentialsValidator;
 
         public UserService(IUserRepository repository, IMapper mapper, ITokenService tokenService, UserValidator userValidator,
-            UpdateUserValidator updateUserValidator, CredentialsValidator credentialsValidator, IFileRepository fileRepository)
+            UpdateUserValidator updateUserValidator, CredentialsValidator credentialsValidator, IFileRepository fileRepository,
+            IProviderCacheRepository providerCacheRepository)
         {
             _repository = repository;
             _mapper = mapper;
@@ -38,14 +40,22 @@ namespace ApiGoBarber.Services
             _updateUserValidator = updateUserValidator;
             _credentialsValidator = credentialsValidator;
             _fileRepository = fileRepository;
+            _providerCacheRepository = providerCacheRepository;
         }
 
-        public async Task<List<ProviderDTO>> GetProviders()
+        public async Task<IEnumerable<ProviderDTO>> GetProviders()
         {
+            var providersCache = await _providerCacheRepository.GetProviders();
+            if(providersCache != null)
+            {
+                return providersCache;
+            }
             Expression<Func<User, bool>> predicate = u => u.Provider;
             Func<IQueryable<User>, IOrderedQueryable<User>> orderBy = u => u.OrderBy(u => u.Name);
             IEnumerable<User> providers = await _repository.GetAsync(predicate, orderBy, "Avatar");
-            return _mapper.Map<List<ProviderDTO>>(providers);
+            IEnumerable<ProviderDTO> providersDto = _mapper.Map<List<ProviderDTO>>(providers);
+            await _providerCacheRepository.UpdateProviders(providersDto);
+            return providersDto;
         }
 
         public async Task<AuthResponseDTO> Login(UserCredentialsDTO dto)
@@ -95,6 +105,11 @@ namespace ApiGoBarber.Services
             }
             dto.Password = BCrypt.Net.BCrypt.HashPassword(dto.Password, 8);
             User userCreated = await _repository.AddAsync(_mapper.Map<User>(dto));
+
+            if (userCreated.Provider)
+            {
+                await _providerCacheRepository.DeleteProviders();
+            }
             return _mapper.Map<UserDTO>(userCreated);
         }
 

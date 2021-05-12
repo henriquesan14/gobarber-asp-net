@@ -14,6 +14,6 @@ namespace ApiGoBarber.Services.Interfaces
 
         Task<AuthResponseDTO> Login(UserCredentialsDTO dto);
 
-        Task<List<ProviderDTO>> GetProviders();
+        Task<IEnumerable<ProviderDTO>> GetProviders();
     }
 }

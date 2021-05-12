@@ -26,9 +26,9 @@ namespace ApiGoBarber.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProviderDTO>>> GetProviders() 
+        public async Task<ActionResult<IEnumerable<ProviderDTO>>> GetProviders() 
         {
-            return await _userService.GetProviders();
+            return Ok(await _userService.GetProviders());
         }
 
         [HttpGet("{id}/Available")]

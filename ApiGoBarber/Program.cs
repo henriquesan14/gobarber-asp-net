@@ -21,6 +21,7 @@ namespace ApiGoBarber
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseSentry("https://f945005242874867bd3f0da907e36225@o343736.ingest.sentry.io/2036859");
                 });
     }
 }
