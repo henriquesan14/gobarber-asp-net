@@ -137,7 +137,8 @@ namespace ApiGoBarber.Services
             }
 
             DateTime date = appointment.Date.Value;
-            DateTime dateWithSub = new DateTime(date.Year, date.Month, date.Day, date.Hour - 2, date.Minute, date.Second);
+            DateTime dateWithSub = date.AddHours(-2);
+
             if (dateWithSub < DateTime.Now)
             {
                 throw new HttpResponseException(HttpStatusCode.BadRequest, new

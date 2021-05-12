@@ -15,5 +15,20 @@ namespace ApiGoBarber.DTOs
         public DateTime? CanceledAt { get; set; }
 
         public ProviderDTO Provider { get; set; }
+
+        public bool Past { 
+            get
+            {
+                return Date < DateTime.Now;
+            } 
+        }
+
+        public bool Cancelable
+        {
+            get
+            {
+                return DateTime.Now < Date.Value.AddHours(-2);
+            }
+        }
     }
 }
