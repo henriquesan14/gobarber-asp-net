@@ -29,6 +29,7 @@ namespace ApiGoBarber.Extensions
             services.AddScoped<IAppointmentService, AppointmentService>();
             services.AddScoped<INotificationService, NotificationService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IEmailService, EmailService>();
 
             //validators
             services.AddScoped<UserValidator>();

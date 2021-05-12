@@ -27,14 +27,17 @@ namespace ApiGoBarber.Services
         private readonly IMapper _mapper;
         private readonly AppointmentValidator _validator;
 
+        private readonly IEmailService _emailService;
+
         public AppointmentService(IAppointmentRepository repository, IMapper mapper, AppointmentValidator validator,
-            IUserRepository userRepository, INotificationRepository notificationRepository)
+            IUserRepository userRepository, INotificationRepository notificationRepository, IEmailService emailService)
         {
             _repository = repository;
             _userRepository = userRepository;
             _mapper = mapper;
             _validator = validator;
             _notificationRepository = notificationRepository;
+            _emailService = emailService;
         }
 
         public async Task<PagedList<AppointmentDTO>> GetAppointments(int userId, PageFilter pageFilter)
@@ -143,7 +146,25 @@ namespace ApiGoBarber.Services
                 });
             }
             appointment.CanceledAt = DateTime.Now;
+            _emailService.SendMail(appointment.Provider.Email, "Agendamento cancelado", CreateTemplateEmail(appointment));
             await _repository.UpdateAsync(appointment);
+        }
+
+        private string CreateTemplateEmail(Appointment appointment)
+        {
+            string dateNow = DateTime.Now.ToString("dd/MM/yyyy HH:mm");
+            return
+                "<div style=\"font-family: Arial, Helvetica, sans-serif; font-size: 16px; line-height: 1.6; color: #222; max-width: 600px\">"
+                +
+                $"<strong>Olá, {appointment.Provider.Name}</strong>" +
+                "<p>Houve um cancelamento de horário, confira os detalhes abaixo: </div>" +
+                $"<p> <strong>Cliente: {appointment.User.Name}</strong><br>" +
+                $"<p> <strong>Data/Hora: {dateNow}</strong><br><br>" +
+                "<small> O horário está novamente disponível para novos agendamentos</small>" +
+                "</p>" +
+                "</div><br>" +
+                "Equipe GoBarber"
+                ;
         }
     }
 
