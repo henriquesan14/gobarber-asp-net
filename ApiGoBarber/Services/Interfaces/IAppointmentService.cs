@@ -13,5 +13,7 @@ namespace ApiGoBarber.Services.Interfaces
         Task<PagedList<AppointmentDTO>> GetAppointments(int userId, PageFilter pageFilter);
         Task<IEnumerable<AppointmentDTO>> GetSchedule(int userId, DateTime? date);
         Task CancelAppointment(int id, int userId);
+
+        Task<IEnumerable<AvailableDTO>> GetAvailable(int id, long date);
     }
 }

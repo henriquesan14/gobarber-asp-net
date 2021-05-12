@@ -166,6 +166,57 @@ namespace ApiGoBarber.Services
                 "Equipe GoBarber"
                 ;
         }
+
+
+        public async Task<IEnumerable<AvailableDTO>> GetAvailable(int id, long date)
+        {
+            if(date == 0)
+            {
+                throw new HttpResponseException(HttpStatusCode.BadRequest, new
+                {
+                    Message = "Data inválida"
+                });
+            }
+            DateTime dateTime = DateTimeOffset.FromUnixTimeMilliseconds(date).DateTime;
+            DateTime dateMin = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 0, 0, 0);
+            DateTime dateMax = new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, 23, 59, 59);
+
+            Expression<Func<Appointment, bool>> predicate = a => a.Provider.Id == id && !a.CanceledAt.HasValue && (
+                a.Date >= dateMin && a.Date <= dateMax
+            );
+            IEnumerable<Appointment> appointments = await _repository.GetAsync(predicate);
+
+            var schedule = new List<string>() { 
+                "08:00",
+                "09:00",
+                "10:00",
+                "11:00",
+                "12:00",
+                "13:00",
+                "14:00",
+                "15:00",
+                "16:00",
+                "17:00",
+                "18:00",
+                "19:00"
+            };
+            List<AvailableDTO> availables = new List<AvailableDTO>();
+            foreach(var time in schedule)
+            {
+                var hour = time.Split(":")[0];
+                DateTime dateFormated = new DateTime(dateMin.Year, dateMin.Month, dateMin.Day, Int32.Parse(hour), 0, 0);
+                bool isAvailable = dateFormated > DateTime.Now && appointments.Where(a => a.Date.Value.Hour == int.Parse(hour)).Count() == 0;
+                AvailableDTO available = new AvailableDTO
+                {
+                    Time = time,
+                    Value = dateFormated,
+                    Available = isAvailable
+                };
+                availables.Add(available);
+            }
+
+            return availables;
+        }
     }
 
 }

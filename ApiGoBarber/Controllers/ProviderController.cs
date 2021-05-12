@@ -10,23 +10,32 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ApiGoBarber.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     [Authorize]
     public class ProviderController : ControllerBase
     {
 
         private readonly IUserService _userService;
+        private readonly IAppointmentService _appointmentService;
 
-        public ProviderController(IUserService userService)
+        public ProviderController(IUserService userService, IAppointmentService appointmentService)
         {
             _userService = userService;
+            _appointmentService = appointmentService;
         }
 
         [HttpGet]
         public async Task<ActionResult<List<ProviderDTO>>> GetProviders() 
         {
             return await _userService.GetProviders();
+        }
+
+        [HttpGet("{id}/Available")]
+        public async Task<ActionResult<IEnumerable<AvailableDTO>>> GetAvailable(int id, [FromQuery] long date)
+        {
+            var available = await _appointmentService.GetAvailable(id, date);
+            return Ok(available);
         }
     }
 }
